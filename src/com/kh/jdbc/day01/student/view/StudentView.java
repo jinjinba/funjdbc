@@ -25,6 +25,35 @@ public class StudentView {
 			}
 		}
 		
+		public void showOne(Student student) {
+			System.out.print("아이디 : " + student.getStudentId());
+			System.out.print(", 비밀번호 : " + student.getStudentPwd());
+			System.out.print(", 이름 : " + student.getStudentName());
+			System.out.print(", 성별 : " + student.getGender());
+			System.out.print(", 나이 : " + student.getAge());
+			System.out.print(", 이메일 : " + student.getEmail());
+			System.out.print(", 전화번호 : " + student.getPhone());
+			System.out.print(", 주소 : " + student.getAddress());
+			System.out.print(", 취미 : " + student.getHobby());
+			System.out.println(", 가입날짜 : " + student.getEnrollDate());
+
+		}
+		
+		public String inputStudentId(String message) {
+			Scanner sc = new Scanner(System.in);
+			System.out.print(message + "할 아이디 입력 : ");
+			String studentId = sc.next();
+			return studentId;
+		}
+		
+		public String inputStudentName(String message) {
+			Scanner sc = new Scanner(System.in);
+			System.out.print(message + "이름 입력 : ");
+			String studentName = sc.next();
+			return studentName;
+		}
+		
+		
 		public Student inputStudent() {
 			Scanner sc = new Scanner(System.in);
 			System.out.print("아이디 : ");
@@ -44,7 +73,7 @@ public class StudentView {
 			System.out.print("주소 : ");
 			sc.nextLine();
 			String address = sc.nextLine();
-			System.out.print("취미(,로구분) : ");
+			System.out.print("취미(, 로구분) : ");
 			String hobby = sc.next();
 			Student student = 
 					new Student(studentId
@@ -68,6 +97,28 @@ public class StudentView {
 //			student.setPhone(phone);
 //			student.setAddress(address);
 		}
+		
+		public Student modifyStudent(Student student) {
+			Scanner sc = new Scanner(System.in);
+//			Student student = new Student();
+			System.out.println("수정할 비밀번호 입력 : ");
+			String studentPwd = sc.next();
+			System.out.println("수정할 이메일 입력 : ");
+			String email = sc.next();
+			System.out.println("수정할 전화번호 입력 : ");
+			String phone = sc.next();
+			System.out.println("수정할 주소 입력 : ");
+			sc.nextLine();
+			String address = sc.nextLine();
+			System.out.println("수정할 취미 입력 : ");
+			String hobby = sc.next();
+			student.setStudentPwd(studentPwd);
+			student.setEmail(email);
+			student.setPhone(phone);
+			student.setAddress(address);
+			student.setHobby(hobby);
+			return student;
+		}
 
 		public int mainMenu() {
 			Scanner sc = new Scanner(System.in);
@@ -87,8 +138,6 @@ public class StudentView {
 		public void displayError(String message) {
 			System.out.println("[서비스 실패] : " + message);
 		}
-		
-		
 		
 		
 		
