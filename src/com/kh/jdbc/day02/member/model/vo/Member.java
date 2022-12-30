@@ -14,14 +14,11 @@ public class Member {
 	private String memberHobby;
 	private Timestamp memberDate;
 	
-	public Member() {}
+	public Member() {}	// 기본 생성자
 	
-	public Member(Member member) {
-		this.memberId = memberId;
-	}
-
+//	매개변수 생성자
 	public Member(String memberId, String memberName, String memberPwd, String memberGender, int memberAge,
-			String memberEmail, String memberPhone, String memberAddress, String memberHobby, Timestamp memberDate) {
+			String memberEmail, String memberPhone, String memberAddress, String memberHobby) {
 		super();
 		this.memberId = memberId;
 		this.memberName = memberName;
@@ -32,7 +29,6 @@ public class Member {
 		this.memberPhone = memberPhone;
 		this.memberAddress = memberAddress;
 		this.memberHobby = memberHobby;
-		this.memberDate = memberDate;
 	}
 
 	public String getMemberId() {

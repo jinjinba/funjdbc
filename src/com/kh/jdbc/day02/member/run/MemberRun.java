@@ -12,38 +12,72 @@ public class MemberRun {
 		MemberController mCon = new MemberController();
 		Member member = null;
 		List<Member> mList = null;
-		String studentId = "";
-		String studentName = "";
+		String memberId = "";
+		String memberName = "";
 		int result = 0;
-		
-		goodbye :
-		while(true) {
+
+		goodbye: while (true) {
 			int choice = mView.mainMenu();
-			switch(choice) {
-			case 0 : break goodbye;
-			case 1 :
+			switch (choice) {
+			case 0:
+				break goodbye;
+			case 1:
 				// 1. 회원 전체 조회
 				mList = mCon.printAll();
 				if (!mList.isEmpty()) {
 					mView.showAll(mList);
-				}else {
+				} else {
 					mView.displayError("데이터가 존재하지 않습니다.");
 				}
 				break;
-			case 2 : break;
-			case 3 : break;
-			case 4 :
+			case 2:
+				// 아이디 조회
+				memberId = mView.inputMemberId();
+				member = mCon.printOneById(memberId);
+				if (member != null) {
+					mView.showOne(member);
+				} else {
+					mView.displayError("등록된 아이디가 아닙니다.");
+				}
+				break;
+			case 3:
+				break;
+			case 4:
 				member = mView.inputMember();
 				result = mCon.registerMember(member);
-				if(result > 0) {
+				if (result > 0) {
+					// 성공메시지!
 					mView.displaySuccess("가입이 완료되었습니다.");
-				}else {
+				} else {
+					// 실패메시지!
 					mView.displayError("가입 실패하였습니다.");
 				}
 				break;
-			case 5 : break;
-			case 6 : break;
-			default : break;
+			case 5:
+				break;
+			case 6:
+				// 회원 삭제
+				memberId = mView.inputMemberId("삭제");
+				result = mCon.removeMember(memberId);
+				if (result > 0) {
+					mView.displaySuccess("회원탈퇴 성공");
+				} else {
+					mView.displayError("회원탈퇴 실패!");
+				}
+				break;
+			case 7:
+				member = mView.inputLoginInfo();
+				result = mCon.checkInfo(member);
+				if(result > 0) {
+					// 로그인 성공
+					mView.displaySuccess("로그인 성공");
+				}else {
+					// 로그인 실패
+					mView.displayError("일치하는 정보가 존재하지 않습니다.");
+				}
+				break;
+			default:
+				break;
 			}
 		}
 	}

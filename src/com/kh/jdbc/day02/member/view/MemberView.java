@@ -3,6 +3,7 @@ package com.kh.jdbc.day02.member.view;
 import java.util.List;
 import java.util.Scanner;
 
+import com.kh.jdbc.day01.student.model.vo.Student;
 import com.kh.jdbc.day02.member.model.vo.Member;
 
 public class MemberView {
@@ -32,12 +33,48 @@ public class MemberView {
 			System.out.print(", 전화번호 : " + mOne.getMemberPhone());
 			System.out.print(", 주소 : " + mOne.getMemberAddress());
 			System.out.print(", 취미 : " + mOne.getMemberHobby());
-			System.out.print(", 가입날짜 : " + mOne.getMemberDate());
+			System.out.println(", 가입날짜 : " + mOne.getMemberDate());
+			System.out.println();
 		}
+		System.out.println();
+	}
+	
+	public void showOne(Member member) {
+		System.out.print("아이디 : " + member.getMemberId());
+		System.out.print(", 비밀번호 : " + member.getMemberPwd());
+		System.out.print(", 이름 : " + member.getMemberName());
+		System.out.print(", 성별 : " + member.getMemberGender());
+		System.out.print(", 나이 : " + member.getMemberAge());
+		System.out.print(", 이메일 : " + member.getMemberEmail());
+		System.out.print(", 전화번호 : " + member.getMemberPhone());
+		System.out.print(", 주소 : " + member.getMemberAddress());
+		System.out.print(", 취미 : " + member.getMemberHobby());
+		System.out.println(", 가입날짜 : " + member.getMemberDate());
+	}
+	
+	public Member inputLoginInfo() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("=== === 로그인이 필요합니다. === ===");
+		System.out.print("아이디 : ");
+		String memberId = sc.next();
+		System.out.print("비밀번호 : ");
+		String memberPwd = sc.next();
+		Member member = new Member();
+		member.setMemberId(memberId);
+		member.setMemberPwd(memberPwd);
+		return member;
+	}
+	
+	public String inputMemberId() {
+		Scanner sc = new Scanner(System.in);
+		System.out.print("아이디 입력 : ");
+		String memberId = sc.next();
+		return memberId;
 	}
 	
 	public Member inputMember() {
 		Scanner sc = new Scanner(System.in);
+		System.out.println("=== === === 회원 정보 입력 === === ===");
 		System.out.print("아이디 : ");
 		String memberId = sc.next();
 		System.out.print("비밀번호 : ");
@@ -55,28 +92,28 @@ public class MemberView {
 		System.out.print("주소 : ");
 		sc.nextLine();
 		String memberAddress = sc.nextLine();
-		System.out.print("취미(,로 구분 : ");
+		System.out.print("취미(,로 구분) : ");
 		String memberHobby = sc.next();
 		Member member =
-				new Member(memberId
-						, memberPwd
+				new Member(
+						memberId
 						, memberName
+						, memberPwd
 						, memberGender
 						, memberAge
 						, memberEmail
 						, memberPhone
 						, memberAddress
-						, memberHobby
-						, null);
+						, memberHobby);
 		return member;
 	}
 	
-	
-	
-	
-	
-	
-	
+	public String inputMemberId(String category) {
+		Scanner sc = new Scanner(System.in);
+		System.out.print(category + "할 아이디 입력");
+		String mId = sc.next();
+		return mId;
+	}
 	
 	
 	
