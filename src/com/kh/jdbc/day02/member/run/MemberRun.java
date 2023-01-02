@@ -32,7 +32,7 @@ public class MemberRun {
 				break;
 			case 2:
 				// 아이디 조회
-				memberId = mView.inputMemberId();
+				memberId = mView.inputMemberId("검색");
 				member = mCon.printOneById(memberId);
 				if (member != null) {
 					mView.showOne(member);
@@ -41,6 +41,14 @@ public class MemberRun {
 				}
 				break;
 			case 3:
+				// 이름 조회
+				memberName = mView.inputMemberName("검색");
+				mList = mCon.printOneByName(memberName);
+				if(mList != null) {
+					mView.showAll(mList);
+				}else {
+					mView.displayError("등록된 이름 아닌데?");
+				}
 				break;
 			case 4:
 				member = mView.inputMember();
@@ -54,6 +62,24 @@ public class MemberRun {
 				}
 				break;
 			case 5:
+				// 아이디를 입력받고 
+				memberId = mView.inputMemberId("수정");
+				// 데이터가 존재하면
+				member = mCon.printOneById(memberId);
+				if(member != null) {
+					// 수정할 데이터 입력 받기
+					member = mView.modifyMember(memberId);
+					// 입력받은 데이터로 수정하기!
+					result = mCon.modifyMemberInfo(member);
+					if(result > 0) {
+						mView.displaySuccess("수정 성공!");
+					}else {
+						mView.displayError("일치하는 회원이 존재하지 않습니다.");
+					}
+				}else {
+					mView.displayError("일치하는 회원이 존재하지 않습니다.");
+				}
+				
 				break;
 			case 6:
 				// 회원 삭제

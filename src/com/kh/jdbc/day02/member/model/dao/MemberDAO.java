@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.kh.jdbc.day02.member.model.vo.Member;
+
+import jdk.jshell.StatementSnippet;
 	
 public class MemberDAO {
 	private final String URL = "jdbc:oracle:thin:@localhost:1521:XE";
@@ -60,15 +62,16 @@ public class MemberDAO {
 	
 	public Member selectOneById(String memberId) {
 		Member member = null;
-		String sql = "SELECT * FROM MEMBER_TBL WHERE MEMBER_ID =";
+		String query = "SELECT * FROM MEMBER_TBL WHERE MEMBER_ID = ?";
 		try {
 			Class.forName(DRIVER_NAME);
 			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-			Statement stmt = conn.createStatement();
-			ResultSet rset = stmt.executeQuery(sql);
+			PreparedStatement pstmt = conn.prepareStatement(query);
+			pstmt.setNString(1, memberId);
+			ResultSet rset = pstmt.executeQuery();
 			if(rset.next()) {
 				member = new Member();
-				member.setMemberId(rset.getString("MEMBER_ID"));
+				member.setMemberId(rset.getString(1));
 				member.setMemberPwd(rset.getString("MEMBER_PWD"));
 				member.setMemberName(rset.getString("MEMBER_NAME"));
 				member.setMemberGender(rset.getString("MEMBER_GENDER"));
@@ -76,11 +79,12 @@ public class MemberDAO {
 				member.setMemberEmail(rset.getString("MEMBER_EMAIL"));
 				member.setMemberPhone(rset.getString("MEMBER_PHONE"));
 				member.setMemberAddress(rset.getString("MEMBER_ADDRESS"));
-				member.setMemberHobby(rset.getString("MEMBER_ID"));
+				member.setMemberHobby(rset.getString("MEMBER_HOBBY"));
 				member.setMemberDate(rset.getTimestamp("MEMBER_DATE"));
 			}
+			
 			rset.close();
-			stmt.close();
+			pstmt.close();
 			conn.close();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -89,6 +93,43 @@ public class MemberDAO {
 		}
 		return member;
 	}
+	
+	public List<Member> selectOneByName(String memberName) {
+		List<Member> mList = null;
+		String sql = "SELECT * FROM MEMBER_TBL WHERE MEMBER_NAME LIKE ?";
+		try {
+			Class.forName(DRIVER_NAME);
+			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setNString(1, "%"+memberName+"%");	//쿼리문 실행 준비
+			ResultSet rset = pstmt.executeQuery();
+			mList = new ArrayList<Member>();
+			// RestulSet에 있는 것을 그대로 쓰지 못하기 때문에 매핑작업을 해줌(후처리)
+			while(rset.next()) {
+				Member member = new Member();
+				member.setMemberId(rset.getString(1));
+				member.setMemberPwd(rset.getString("MEMBER_PWD"));
+				member.setMemberName(rset.getString("MEMBER_NAME"));
+				member.setMemberGender(rset.getString("MEMBER_GENDER"));
+				member.setMemberAge(rset.getInt("MEMBER_AGE"));
+				member.setMemberEmail(rset.getString("MEMBER_EMAIL"));
+				member.setMemberPhone(rset.getString("MEMBER_PHONE"));
+				member.setMemberAddress(rset.getString("MEMBER_ADDRESS"));
+				member.setMemberHobby(rset.getString("MEMBER_HOBBY"));
+				member.setMemberDate(rset.getTimestamp("MEMBER_DATE"));
+				mList.add(member);
+			}
+			rset.close();
+			pstmt.close();
+			conn.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return mList;
+	}
+	
 	/**
 	 * 로그인
 	 * @param member
@@ -131,13 +172,13 @@ public class MemberDAO {
 			pstmt.setString(1, member.getMemberId());
 			pstmt.setString(2, member.getMemberPwd());
 			pstmt.setString(3, member.getMemberName()); //시험문제 순서 상관 X !!!!!
-			pstmt.setString(9, member.getMemberHobby());
 			pstmt.setString(4, member.getMemberGender());
-			pstmt.setString(8, member.getMemberAddress());
 			pstmt.setInt(5, member.getMemberAge());
 			pstmt.setString(6, member.getMemberEmail());
 			pstmt.setString(7, member.getMemberPhone());	//쿼리문 실행 준비
-			result = pstmt.executeUpdate(); // 쿼리문 실행, ()에 SQL 안들어감!!!!!!!!!!
+			pstmt.setString(9, member.getMemberHobby());
+			pstmt.setString(8, member.getMemberAddress());
+			result = pstmt.executeUpdate();   // 쿼리문 실행, ()에 SQL 안들어감!!!!!!!!!!
 			// DML(INSERT, UPDATE, DELETE)은 executeUpdate() -> int 반환
 			pstmt.close();
 			conn.close();
@@ -147,6 +188,31 @@ public class MemberDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return result;
+	}
+	
+	public int updateMember(Member member) {
+		int result = 0;
+		String query = "UPDATE MEMBER_TBL SET MEMBER_PWD = ?, MEMBER_EMAIL = ?, MEMBER_PHONE = ?, MEMBER_ADDRESS = ?, MEMBER_HOBBY = ? WHERE MEMBER_ID = ?";
+		try {
+			Class.forName(DRIVER_NAME);
+			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			PreparedStatement pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, member.getMemberPwd());
+			pstmt.setString(2, member.getMemberEmail());
+			pstmt.setString(3, member.getMemberPhone());
+			pstmt.setString(4, member.getMemberAddress());
+			pstmt.setString(5, member.getMemberHobby());
+			pstmt.setString(6, member.getMemberId());	// 쿼리문 실행 준비 완료
+			result = pstmt.executeUpdate();
+			pstmt.close();
+			conn.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		return result;
 	}
 	
