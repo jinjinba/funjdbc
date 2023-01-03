@@ -4,16 +4,16 @@ import java.sql.Connection;
 import java.util.List;
 
 import com.kh.jdbc.common.JDBCTemplate;
-import com.kh.jdbc.day03.member.model.dao.MemberDAO;
+import com.kh.jdbc.day03.member.model.dao.MemberDao;
 
 public class MemberService {
 	
 //	private JDBCTemplate jdbcTemplate;
-	private MemberDAO mDao;		
+	private MemberDao mDao;		
 	
 	public MemberService() {
 //		jdbcTemplate = JDBCTemplate.getDriverLoad();
-		mDao = new MemberDAO();		// 생략하지 말기!
+		mDao = new MemberDao();		// 생략하지 말기!
 	}
 	/**
 	 * 회원 전체 조회 Service
